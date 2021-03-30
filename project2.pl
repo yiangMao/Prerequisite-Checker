@@ -19,7 +19,11 @@ sbefore(Y,T,Y,T).
 sbefore(Y1,T1,Y2,T2) :- before(Y1,T1,Y2,T2).
 
 % course(Code,Year,Term,Credit,Req), a course contains a course code, the year of the course, the term of the course, credits of the course, and a list of requirements of this course.
-
+course(cpsc100,2020,winter,3,[]).
+course(math100,2020,fall,3,[]).
+course(cpsc200,2020,sum,3,[req(pre,cpsc100)]).
+course(cpsc210,2020,fall,3,[req(alt,(cpsc100,math100))]).
+course(math110,2020,fall,3,[req(co,math100)]).
 
 % req(Rtype, Statement), a requirement has a requirement type(pre,alt,co) and the specific statement of that require.
 % req(pre,CPSC110) means CPSC110 is a prereq.
@@ -29,6 +33,10 @@ sbefore(Y1,T1,Y2,T2) :- before(Y1,T1,Y2,T2).
 % fit(C,S) is true if the given schedule S can fit all the requirements of the given course C.
 fit(course(Code,Year,Term,Credit,[]),S).
 fit(course(Code,Year,Term,Credit,[RH|RT]),S) :- checkhelper(Code,Year,Term,[RH|RT],S)
+% test with:
+% fit(course(math110,2020,fall,3,[req(co,math100)]),[course(math100,2020,fall,3,[])]).
+% fit(course(cpsc210,2020,fall,3,[req(alt,(cpsc100,math100))]),[course(math100,2020,fall,3,[]),course(cpsc100,2020,winter,3,[])]).
+% fit(course(cpsc200,2020,sum,3,[req(pre,cpsc100)]),[course(cpsc100,2020,winter,3,[])]).
 
 checkhelper(_,_,_,[],S).
 checkhelper(Code,Year,Term,[RH|RT],S) :-  check(Code,Year,Term,RH,S),checkhelper(Code,Year,Term,RT,S)
@@ -39,7 +47,8 @@ check(C1,Y1,T1,req(pre,Code),[course(Code,Y2,T2,_,_)|T]) :- before(Y2,T2,Y1,T1).
 check(C1,Y1,T1,req(pre,Code),[course(Code1,_,_,_,_)|T]) :- dif(Code,Code1),check(C1,Y1,T1,req(pre,Code),T).
 
 % checks for alt prerequisite:
-check(C1,Y1,T1,req(alt,(Code1,Code2)),[course(Code,Y2,T2,_,_)|T]) :- or((Code=Code1),(Code=Code2)),before(Y2,T2,Y1,T1).
+check(C1,Y1,T1,req(alt,(Code1,Code2)),[course(Code,Y2,T2,_,_)|T]) :-
+    or(check(C1,Y1,T1,req(pre,Code1),[course(Code,Y2,T2,_,_)|T]),check(C1,Y1,T1,req(pre,Code2),[course(Code,Y2,T2,_,_)|T])).
 check(C1,Y1,T1,req(alt,(Code1,Code2)),[course(Code,_,_,_,_)|T]) :- dif(Code,Code1),dif(Code,Code2),check(C1,Y1,T1,req(alt,Code),T).
 
 % checks for co-requisites
