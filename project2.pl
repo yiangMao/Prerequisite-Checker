@@ -58,11 +58,10 @@ check(C1,Y1,T1,req(co,Code),[course(Code1,_,_,_,_)|T]) :- dif(Code,Code1),check(
 % schedule(Courses). This a list of all courses added in the schedule.
 % updateschedule(S,Courses,Terms,NumT).
 updateschedule(S,[],S).
-updateschedule(S,[CH|CT],) :- course(CH,Y,T,_,_),fit(course(CH,Y,T,_,_),S),insertschedule(S,C,SN),updateschedule(SN,CT,NTneed,NTcur+1).
-% order of list? list not complete?
+% updateschedule(S,[OH|OT],SF) :-sort([OH|OT],[CH|CT]),course(CH,Y,T,_,_),fit(course(CH,Y,T,_,_),S),insertschedule(S,C,SN),updateschedule(SN,CT,SF).
+% TODO: need to change the sort to the correct sort function.
 
-% notcontainedterm(S,Y,T). Checks if a Term of a Year is contained in the schedule.
-notcontainedterm([course(_,Y1,T1,_,_)|ST],Y,T) :- dif(Y,Y1),dif(T,T1),notcontainedterm(ST,Y,T).
+insertschedule(S,C,[C|S]).
 
 
 
