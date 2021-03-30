@@ -105,6 +105,7 @@ getCourse(Code,[course(Code1,T,Y,C,Req)|T],Course) :- dif(Code,Code1),getCourse(
 contains(Code,[course(Code,_,_,_,_)|_]).
 contains(Code,[course(Code1,_,_,_,_)|T]) :- dif(Code,Code1), contains(Code,T).
 
+
 /*
 % removeNone(S,SN), is true if SN contains all the elements in list S in the same order except the none values.
 removeNone([],[]).
