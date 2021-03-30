@@ -2,9 +2,9 @@
 
 Given a knowledge base containing:
 
-(1) a pre-requisite list denoting which courses should be taken before which other courses
+- a pre-requisite list denoting which courses should be taken before which other courses
 
-(2) a schedule of when each of these courses is offered (containing the TERM, YEAR and TIME)
+- a schedule of when each of these courses is offered (containing the TERM, YEAR and TIME)
 
 this prolog program will return whether or not it is possible to complete a given set of courses in a given number of years.
 
