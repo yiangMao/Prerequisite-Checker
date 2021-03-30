@@ -1,8 +1,8 @@
 % generateGraph(CourseList, GraphEdges) takes a course list such as: 
 %    [
-%	     course(cs300, 2021, "summer", 3, [cs100, cs200]),
-%		 course(cs200, 2020, "fall", 3, [cs100]),
-%        course(cs100, 2020, "fall", 3, [ma12]).
+%        course(cpsc200,2020,sum,3,[req(pre,cpsc100)]).
+%        course(cpsc210,2020,fall,3,[req(alt,(cpsc100,math100))]).
+%        course(math110,2020,fall,3,[req(co,math100)]).
 %    ]
 %
 % and returns a list representing the edges in the directed graph.
@@ -20,7 +20,8 @@ generateGraph(CourseList, Answer) :-
 
 % Helper functions for generateGraph %
 pair(course(Code, _, _, _, Prereqs), Pairs) :-
-	pairHelper([Code], Prereqs, Pairs).
+	prereqsList(Prereqs, ListOfCourseCodes),
+	pairHelper([Code], ListOfCourseCodes, Pairs).
 
 pairHelper(L1, L2, Pairs) :-
 	findall([B,A], (member(A, L1), member(B, L2)), Pairs).
@@ -31,15 +32,21 @@ flatten([A|B],[A|B1]) :- flatten(B,B1).
 
 append( [], X, X).
 append( [X | Y], Z, [X | W]) :- append( Y, Z, W).
+
+course_code(req(pre,Code), Code).
+course_code(req(co, Code), Code).
+prereqsList(Prereqs, ListOfCourseCodes) :-
+	maplist(course_code, Prereqs, ListOfCourseCodes).
+
 % End Helper functions for generateGraph
 
 % Demo 
 %     courseList(L), generateGraph(L, G), topoSort(G,Order).
 %
 courseList([
-	course(cs300, 2021, "summer", 3, [cs100, cs200]),
-	course(cs200, 2020, "fall", 3, [cs100]),
-	course(cs100, 2020, "fall", 3, [ma12])
+	course(cs300, 2021, "summer", 3, [req(pre,cs100), req(pre,cs200)]),
+	course(cs200, 2020, "fall", 3, [req(co, cs100)]),
+	course(cs100, 2020, "fall", 3, [req(pre,ma12)])
 ]).
 
 % Topological sort algorithm
