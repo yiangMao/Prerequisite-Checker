@@ -1,3 +1,4 @@
+:- consult(topologicalSort).
 % or(A,B) is true if A is true or B is true or both A and B are true.
 or(A,B) :- A,B.
 or(A,_) :- A.
@@ -83,7 +84,7 @@ updateschedule(S,[],S).
 
       [math100, math110, cpsc100, ...]
 */
-% updateschedule(S,[OH|OT],SF) :-topoSort([OH|OT],[CH|CT]),course(CH,Y,T,_,_),fit(course(CH,Y,T,_,_),S),insertschedule(S,C,SN),updateschedule(SN,CT,SF).
+% updateschedule(S,[OH|OT],SF) :-topoSort([OH|OT],[CH|CT]),course(CH,Y,T,_,_),fit(course(CH,Y,T,_,_),S),insertschedule(S,CH,SN),updateschedule(SN,CT,SF).
 % TODO: need to change the sort to the correct sort function.
 
 insertschedule(S,C,[C|S]).
