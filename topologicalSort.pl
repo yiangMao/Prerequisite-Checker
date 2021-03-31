@@ -15,7 +15,10 @@
 % where [a,b] means a is a pre-requisite of b.
 generateGraph([], []).
 generateGraph(CourseList, Answer) :-
-	maplist(pair, CourseList, GraphRepresentation),
+	maplist(flattenAltreqs, CourseList, UpdatedCourseList),
+	write(UpdatedCourseList),
+	maplist(pair, UpdatedCourseList, GraphRepresentation),
+	write(GraphRepresentation),
 	flatten(GraphRepresentation, Answer).
 
 % Helper functions for generateGraph %
@@ -33,11 +36,18 @@ flatten([A|B],[A|B1]) :- flatten(B,B1).
 append( [], X, X).
 append( [X | Y], Z, [X | W]) :- append( Y, Z, W).
 
-course_code(req(pre,Code), Code).
-course_code(req(co, Code), Code).
+course_code(req(_,Code), Code).
 prereqsList(Prereqs, ListOfCourseCodes) :-
 	maplist(course_code, Prereqs, ListOfCourseCodes).
 
+% if the course doesn't contain any alternate requisites just return it as is
+flattenAltreqsHelper(req(pre, C1), req(pre, C1)).
+flattenAltreqsHelper(req(co, C1), req(co, C1)).
+% if the courses contain an alternate requisite, update the structure to prepare for sort
+flattenAltreqsHelper(req(alt, (C1, C2)), [req(alt, C1),req(alt, C2)]).
+flattenAltreqs(course(Code,Y,T,C,List), course(Code,Y,T,C,SingleDimensionArray)) :-
+	maplist(flattenAltreqsHelper, List, Result),
+	flatten(Result, SingleDimensionArray).
 % End Helper functions for generateGraph
 
 % Demo 
@@ -45,8 +55,14 @@ prereqsList(Prereqs, ListOfCourseCodes) :-
 %
 courseList([
 	course(cs300, 2021, "summer", 3, [req(pre,cs100), req(pre,cs200)]),
-	course(cs200, 2020, "fall", 3, [req(co, cs100)]),
+	course(cs200, 2020, "fall", 3, [req(pre, cs100)]),
 	course(cs100, 2020, "fall", 3, [req(pre,ma12)])
+]).
+courseListWithAltreqs([
+	course(cs300, 2021, "summer", 3, [req(pre,cs100), req(pre,cs200)]),
+	course(cs200, 2020, "fall", 3, [req(alt, (cs100, cs110))]),
+	course(cs100, 2020, "fall", 3, [req(pre,ma12)]),
+	course(cs110, 2020, "fall", 3, [req(pre, ma12)])
 ]).
 
 % Topological sort algorithm
