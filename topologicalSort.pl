@@ -5,50 +5,58 @@
 %        course(math110,2020,fall,3,[req(co,math100)]).
 %    ]
 %
-% and returns a list representing the edges in the directed graph.
-% 
-% For the above course list, this graph will be represented with 
-% as following edge list:
+% and returns true if GraphEdges is a list representing the edges a -> b
+% where a is a pre-requisite course to b.
+%
+% For the above course list, GraphEdges will be:
 %
 %    [[cs100, cs300], [cs200, cs300], [cs100, cs200], [ma12, cs100]]
 %
-% where [a,b] means a is a pre-requisite of b.
 generateGraph([], []).
 generateGraph(CourseList, Answer) :-
 	maplist(flattenAltreqs, CourseList, UpdatedCourseList),
-	write(UpdatedCourseList),
 	maplist(pair, UpdatedCourseList, GraphRepresentation),
-	write(GraphRepresentation),
 	flatten(GraphRepresentation, Answer).
 
-% Helper functions for generateGraph %
+% pair(course(Code,Y, T,C,Prereqs), Pairs) returns true if Pairs is a list of 
+% prerequisite pairs of the course passed in. 
+% Example:
+%   If the course is: course(cs300, 2021, "summer", 3, [req(pre,cs100), req(pre,cs200)])
+%   this function will return Pairs as [[cs100, cs300], [cs200, cs300]].
 pair(course(Code, _, _, _, Prereqs), Pairs) :-
 	prereqsList(Prereqs, ListOfCourseCodes),
 	pairHelper([Code], ListOfCourseCodes, Pairs).
-
 pairHelper(L1, L2, Pairs) :-
 	findall([B,A], (member(A, L1), member(B, L2)), Pairs).
 
+% flatten flattens a 2D list to make it one dimensional
 flatten([], []).
 flatten([A|B],L) :- is_list(A), flatten(B,B1), !, append(A,B1,L).
 flatten([A|B],[A|B1]) :- flatten(B,B1).
 
+% append appends 2 lists together
 append( [], X, X).
 append( [X | Y], Z, [X | W]) :- append( Y, Z, W).
 
-course_code(req(_,Code), Code).
+
+% Given a list of prereqs represented as [req(pre, cs100), req(pre, cs200)]
+% prerqsList returns true if ListOfCourseCodes is [cs100, cs200]
 prereqsList(Prereqs, ListOfCourseCodes) :-
 	maplist(course_code, Prereqs, ListOfCourseCodes).
+course_code(req(_,Code), Code).
 
+% This function converts a prerequisite list containin alternate prereqs like:
+%   [req(alt, (cs100, cs200))]
+% into a a list like:
+%   [req(alt, cs100), req(alt, cs200)]
+flattenAltreqs(course(Code,Y,T,C,List), course(Code,Y,T,C,SingleDimensionArray)) :-
+	maplist(flattenAltreqsHelper, List, Result),
+	flatten(Result, SingleDimensionArray).
 % if the course doesn't contain any alternate requisites just return it as is
 flattenAltreqsHelper(req(pre, C1), req(pre, C1)).
 flattenAltreqsHelper(req(co, C1), req(co, C1)).
 % if the courses contain an alternate requisite, update the structure to prepare for sort
 flattenAltreqsHelper(req(alt, (C1, C2)), [req(alt, C1),req(alt, C2)]).
-flattenAltreqs(course(Code,Y,T,C,List), course(Code,Y,T,C,SingleDimensionArray)) :-
-	maplist(flattenAltreqsHelper, List, Result),
-	flatten(Result, SingleDimensionArray).
-% End Helper functions for generateGraph
 
 % Demo 
 %     courseList(L), generateGraph(L, G), topoSort(G,Order).
