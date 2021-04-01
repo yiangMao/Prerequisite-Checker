@@ -1,3 +1,16 @@
+% Example schedules for demo purposes
+exampleSchedule([
+    course(cpsc200,2020,sum,3,[req(pre,cpsc100)]),
+    course(cpsc210,2020,fall,3,[req(alt,(cpsc100,math100))]),
+    course(math110,2020,fall,3,[req(co,math100)])
+]).
+
+exampleSchedule2([
+course(cpsc200,2020-sum,3,[req(pre,cpsc100)]),
+course(cpsc210,2020-fall,3,[req(alt,(cpsc100,math100))]),
+course(math110,2020-fall,3,[req(co,math100)])
+]).
+
 % can be completed(S, Number) returns true if a schedule can be completed without exceeding Number credits per term.
 canBeCompleted([], _).
 canBeCompleted(Schedule, MaxCreditsPerTerm) :- 
@@ -21,19 +34,6 @@ canBeCompleted(Schedule, MaxCreditsPerTerm) :-
             and make sure each term credit sum does not exceed the max.
     */
     semesterSumDoesNotExceedMax(SemesterList, NewCoursesRepresentation, MaxCreditsPerTerm).
-
-% Example schedule. 
-exampleSchedule([
-        course(cpsc200,2020,sum,3,[req(pre,cpsc100)]),
-        course(cpsc210,2020,fall,3,[req(alt,(cpsc100,math100))]),
-        course(math110,2020,fall,3,[req(co,math100)])
-]).
-
-exampleSchedule2([
-    course(cpsc200,2020-sum,3,[req(pre,cpsc100)]),
-    course(cpsc210,2020-fall,3,[req(alt,(cpsc100,math100))]),
-    course(math110,2020-fall,3,[req(co,math100)])
-]).
 
 getSemester(course(_, Semester, _, _), Semester).
 
