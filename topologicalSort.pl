@@ -1,3 +1,11 @@
+%
+%
+%
+% Our Functions
+%
+%
+%
+
 % generateGraph(CourseList, GraphEdges) takes a course list such as: 
 %    [
 %        course(cpsc200,2020,sum,3,[req(pre,cpsc100)]).
@@ -17,6 +25,24 @@ generateGraph(CourseList, Answer) :-
 	maplist(flattenAltreqs, CourseList, UpdatedCourseList),
 	maplist(pair, UpdatedCourseList, GraphRepresentation),
 	flatten(GraphRepresentation, Answer).
+	%% make sure output list only contains courses provided in the input list
+	%maplist(getCourse, CourseList, CourseCodeList),
+	%write(FlattendList),
+	%write(CourseCodeList),
+	%intersection(CourseCodeList, FlattendList, Answer).
+
+getCourse(course(Code, _, _, _, _), Code).
+
+% intersection(L1, L2, Answer) returns true if Answer contains the intersection of L1 and L2
+intersection([], _, []).
+intersection([Head|L1tail], L2, L3) :-
+        memberchk(Head, L2),
+        !,
+        L3 = [Head|L3tail],
+        intersection(L1tail, L2, L3tail).
+intersection([_|L1tail], L2, L3) :-
+        intersection(L1tail, L2, L3).
+
 
 % pair(course(Code,Y, T,C,Prereqs), Pairs) returns true if Pairs is a list of 
 % prerequisite pairs of the course passed in. 
@@ -73,8 +99,15 @@ courseListWithAltreqs([
 	course(cs110, 2020, "fall", 3, [req(pre, ma12)])
 ]).
 
+%
+%
+%
 % Topological sort algorithm
 % Credit to: https://github.com/ejmudrak/topologicalSort/blob/master/prolog/graph.pl
+%
+%
+%
+
 
 % % % % % getS: % % % % % 
 % 	Gets Set "S", the initial state of algorithm: 
