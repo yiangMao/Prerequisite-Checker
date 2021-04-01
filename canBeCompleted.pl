@@ -6,32 +6,31 @@ exampleSchedule([
 ]).
 
 exampleSchedule2([
-course(cpsc200,2020-sum,3,[req(pre,cpsc100)]),
-course(cpsc210,2020-fall,3,[req(alt,(cpsc100,math100))]),
-course(math110,2020-fall,3,[req(co,math100)])
+    course(cpsc200,2020-sum,3,[req(pre,cpsc100)]),
+    course(cpsc210,2020-fall,3,[req(alt,(cpsc100,math100))]),
+    course(math110,2020-fall,3,[req(co,math100)])
 ]).
 
-% can be completed(S, Number) returns true if a schedule can be completed without exceeding Number credits per term.
+% can be completed(S, MaxCreditsPerTerm) returns true if a schedule can be completed without exceeding MaxCreditsPerTerm.
 canBeCompleted([], _).
 canBeCompleted(Schedule, MaxCreditsPerTerm) :- 
 	/*
-		Step 1: Combine year and term values
+		Step 1: Combine year and term values. The result is something like:
         	course(cpsc200, 2020sum, 3, [req(pre,cpsc100)]),
         	course(cpsc210, 2020fall, 3, [req(alt,(cpsc100,math100))]),
         	course(math110, 2020fall, 3, [req(co,math100)])
 	*/
 	maplist(combineYearAndTerm, Schedule, NewCoursesRepresentation),
 	/* 
-		Step 2: Extract semester from each course
+		Step 2: Extract semester from each course. The result is something like:
 		    [‘2020sum’, ‘2020fall’, ‘2020fall’]
     */
-    write(NewCoursesRepresentation),
 	maplist(getSemester, NewCoursesRepresentation, SemesterList),
 	/*
 		Step 3: 
-			Iterate through semester list and sum credits in NewCoursesRepresentation 
+			Iterate through semester list and sum the credits for each term.
             [3,6,6]
-            and make sure each term credit sum does not exceed the max.
+            The function will print "YES!" if none of the credits in this array exceed MaxCreditsPerTerm
     */
     semesterSumDoesNotExceedMax(SemesterList, NewCoursesRepresentation, MaxCreditsPerTerm).
 
