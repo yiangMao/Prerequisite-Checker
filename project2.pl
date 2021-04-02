@@ -25,6 +25,7 @@ sbefore(Y1,T1,Y2,T2) :- before(Y1,T1,Y2,T2).
 % TODO: update empty prerequisite
 course(cpsc100,2020,winter,3,[req(pre,none)]).
 course(cpsc110,2020,winter,3,[req(pre,none)]).
+course(cpsc110,2020,sum,3,[req(pre,none)]).
 course(cpsc121,2020,sum,3,[req(co,cpsc110)]).
 course(cpsc200,2020,sum,3,[req(pre,cpsc100),req(pre,cpsc110)]).
 course(cpsc210,2021,sum,3,[req(pre,cpsc110),req(co,cpsc200)]).
@@ -86,6 +87,7 @@ findcourselist([CodeH|CodeT],[course(CodeH,Y,Term,C,Req)|T]) :-course(CodeH,Y,Te
 getCourse(Code,[course(Code,T,Y,C,Req)|_],course(Code,T,Y,C,Req)).
 getCourse(Code,[course(Code1,T,Y,C,Req)|CT],Course) :- dif(Code,Code1),getCourse(Code,CT,Course).
 
+
 % contains(Code,S) is true if schedule contains a course with given course code.
 contains(Code,[course(Code,_,_,_,_)|_]).
 contains(Code,[course(Code1,_,_,_,_)|T]) :- dif(Code,Code1), contains(Code,T).
@@ -115,10 +117,13 @@ course(math221,2021,winter,3,[req(alt,(math100,math101)]).
 test:
 case: course with no prerequisites.
 updateschedule([],[cpsc100],NS),printlist(NS),canBeCompleted(NS,6).
+
 case: course with prerequisite.
 updateschedule([],[cpsc200,cpsc210,cpsc110,cpsc100],NS),printlist(NS),canBeCompleted(NS,6).
+
 case: course with prerequisite and corequisites.
-updateschedule([],[cpsc121,cpsc100],NS),printlist(NS),canBeCompleted(NS,6).
+updateschedule([],[cpsc121,cpsc110],NS),printlist(NS),canBeCompleted(NS,6).
+
 case: course with alternative prerequisite.
 updateschedule([],[math101,math100,math110],NS),printlist(NS),canBeCompleted(NS,6).
 
