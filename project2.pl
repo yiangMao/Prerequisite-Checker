@@ -1,4 +1,6 @@
 :- consult(topologicalSort).
+:- consult(canBeCompleted).
+
 % or(A,B) is true if A is true or B is true or both A and B are true.
 or(A,B) :- A,B.
 or(A,_) :- A.
@@ -24,7 +26,8 @@ sbefore(Y1,T1,Y2,T2) :- before(Y1,T1,Y2,T2).
 course(cpsc100,2020,winter,3,[req(pre,none)]).
 course(cpsc110,2020,winter,3,[req(pre,none)]).
 course(cpsc121,2020,sum,3,[req(co,cpsc110)]).
-course(cpsc200,2020,sum,3,[req(pre,cpsc100)]).
+course(cpsc200,2020,sum,3,[req(pre,cpsc100),req(pre,cpsc110)]).
+course(cpsc210,2021,sum,3,[req(pre,cpsc110),req(co,cpsc200)]).
 course(cpsc221,2020,fall,3,[req(alt,(cpsc210,cpsc121))]).
 course(math100,2020,fall,3,[req(pre,none)]).
 course(math101,2020,fall,3,[req(alt,(math100,math110))]).
@@ -71,21 +74,7 @@ updateschedule(S,Codes,SF) :-findcourselist(Codes,CL),generateGraph(CL,Edges),to
                              getCourse(CH,CL,CourseH),fit(CourseH,S),insertschedule(S,CourseH,SN),
                              updateschedule(SN,CT,SF).
 
-/*
-course(cpsc100,2020,winter,3,[req(pre,none)]).
-course(cpsc110,2020,winter,3,[req(pre,none)]).
-course(cpsc121,2020,sum,3,[req(co,cpsc110)]).
-course(cpsc200,2021,sum,3,[req(pre,cpsc100)]).
-course(cpsc221,2020,fall,3,[req(alt,(cpsc210,cpsc121))]).
-course(math100,2020,fall,3,[req(pre,none)]).
-course(math101,2020,fall,3,[req(alt,(math100,math110)]).
-course(math110,2020,sum,3,[req(pre,none)]).
-course(math200,2020,fall,3,[req(pre,math101)]).
-course(math221,2021,winter,3,[req(alt,(math100,math101)]).
 
-test:
-updateschedule([],[math101,math110,cpsc200,cpsc100,math100,cpsc121,math221],NS),printlist(NS).
-*/
 
 insertschedule(S,C,SN) :- append(S,[C],SN).
 
@@ -109,6 +98,33 @@ removeRedundancy([CodeH|CodeT],S,[CodeH|NCodes]) :- dif(CodeH,none),not(contains
 
 printlist([]).
 printlist([X|List]) :- write(X),nl,printlist(List).
+
+/*
+course(cpsc100,2020,winter,3,[req(pre,none)]).
+course(cpsc110,2020,winter,3,[req(pre,none)]).
+course(cpsc121,2020,sum,3,[req(co,cpsc110)]).
+course(cpsc200,2021,sum,3,[req(pre,cpsc100),req(pre,cpsc110)]).
+course(cpsc210,2021,sum,3,[req(pre,cpsc110),req(co,cpsc200)]).
+course(cpsc221,2020,fall,3,[req(alt,(cpsc210,cpsc121))]).
+course(math100,2020,fall,3,[req(pre,none)]).
+course(math101,2020,fall,3,[req(alt,(math100,math110)]).
+course(math110,2020,sum,3,[req(pre,none)]).
+course(math200,2020,fall,3,[req(pre,math101)]).
+course(math221,2021,winter,3,[req(alt,(math100,math101)]).
+
+test:
+case: course with no prerequisites.
+updateschedule([],[cpsc100],NS),printlist(NS),canBeCompleted(NS,6).
+case: course with prerequisite.
+updateschedule([],[cpsc200,cpsc210,cpsc110,cpsc100],NS),printlist(NS),canBeCompleted(NS,6).
+case: course with prerequisite and corequisites.
+updateschedule([],[cpsc121,cpsc100],NS),printlist(NS),canBeCompleted(NS,6).
+case: course with alternative prerequisite.
+updateschedule([],[math101,math100,math110],NS),printlist(NS),canBeCompleted(NS,6).
+
+updateschedule([],[math101,math110,cpsc200,cpsc100,math100,cpsc121,math221],NS),printlist(NS),canBeCompleted(NS,9).
+*/
+
 
 
 
