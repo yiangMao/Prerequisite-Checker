@@ -5,13 +5,7 @@ exampleSchedule([
     course(math110,2020,fall,3,[req(co,math100)])
 ]).
 
-exampleSchedule2([
-    course(cpsc200,2020-sum,3,[req(pre,cpsc100)]),
-    course(cpsc210,2020-fall,3,[req(alt,(cpsc100,math100))]),
-    course(math110,2020-fall,3,[req(co,math100)])
-]).
-
-% can be completed(S, MaxCreditsPerTerm) returns true if a schedule can be completed without exceeding MaxCreditsPerTerm.
+% canBeCompleted(S, MaxCreditsPerTerm) returns true if a schedule can be completed without exceeding MaxCreditsPerTerm.
 canBeCompleted([], _).
 canBeCompleted(Schedule, MaxCreditsPerTerm) :- 
 	/*
