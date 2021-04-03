@@ -9,7 +9,7 @@ Given a knowledge base containing university courses that have information on:
 - the term and year in which a course is offered
 - which courses should be taken before which other courses
 
-Thisprolog program will take:
+This prolog program will take:
 
 - a list of courses you want to take
 
