@@ -71,7 +71,7 @@ check(C1,Y1,T1,req(co,Code),[course(Code1,_,_,_,_)|T]) :- dif(Code,Code1),check(
 % updateschedule(S,Courses,Terms,NumT).
 updateschedule(S,[],S).
 
-updateschedule(S,Codes,SF) :-findcourselist(Codes,CL),generateGraph(CL,Edges),topoSort(Edges,Order),removeRedundancy(Order,S,[CH|CT]),
+updateschedule(S,Codes,SF) :-findcourselist(Codes,CL),generateGraph(CL,Edges),topoSort(Edges,Order),removeRedundancy2(Order,Codes,NOrder),removeRedundancy(NOrder,S,[CH|CT]),
                              getCourse(CH,CL,CourseH),fit(CourseH,S),insertschedule(S,CourseH,SN),
                              updateschedule(SN,CT,SF).
 
@@ -97,6 +97,15 @@ removeRedundancy([],_,[]).
 removeRedundancy([none|CodeT],S,NCodes) :- removeRedundancy(CodeT,S,NCodes).
 removeRedundancy([CodeH|CodeT],S,NCodes) :- contains(CodeH,S),removeRedundancy(CodeT,S,NCodes).
 removeRedundancy([CodeH|CodeT],S,[CodeH|NCodes]) :- dif(CodeH,none),not(contains(CodeH,S)),removeRedundancy(CodeT,S,NCodes).
+
+% removeRedundancy2(TSCodes,CodeL,NCodes), is true if NCodes contains all the elements in Codes except the redundant ones(none, and ones not in the code list Codes).
+removeRedundancy2([],_,[]).
+removeRedundancy2([none|CodeT],CodeL,NCodes) :- removeRedundancy2(CodeT,CodeL,NCodes).
+removeRedundancy2([CodeH|CodeT],CodeL,[CodeH|NCodes]) :- contains2(CodeH,CodeL),removeRedundancy2(CodeT,CodeL,NCodes).
+removeRedundancy2([CodeH|CodeT],CodeL,NCodes) :- dif(CodeH,none),not(contains2(CodeH,CodeL)),removeRedundancy2(CodeT,CodeL,NCodes).
+% contains2(Code,CodeL) is true if Code is in the CodeL code list.
+contains2(Code,[Code|_]).
+contains2(Code,[Code1|T]) :- dif(Code,Code1), contains2(Code,T).
 
 printlist([]).
 printlist([X|List]) :- write(X),nl,printlist(List).
@@ -136,6 +145,19 @@ updateschedule([],[cpsc200,cpsc300],NS),printlist(NS),canBeCompleted(NS,6).
 
 case: course with none of its alternative prerequisites.
 updateschedule([],[cpsc300,cpsc210,cpsc200],NS),printlist(NS),canBeCompleted(NS,6).
+
+Wrong sort cases:
+compare these two:
+findcourselist([cpsc221,cpsc210],CL),generateGraph(CL,Edges),topoSort(Edges,Order).
+findcourselist([cpsc210,cpsc221],CL),generateGraph(CL,Edges),topoSort(Edges,Order).
+
+compare these two:
+findcourselist([math101,math100],CL),generateGraph(CL,Edges),topoSort(Edges,Order).
+findcourselist([math100,math101],CL),generateGraph(CL,Edges),topoSort(Edges,Order).
+
+compare these two:
+findcourselist([math221,math100],CL),generateGraph(CL,Edges),topoSort(Edges,Order).
+findcourselist([math100,math221],CL),generateGraph(CL,Edges),topoSort(Edges,Order).
 */
 
 
