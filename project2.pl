@@ -109,6 +109,7 @@ course(cpsc200,2021,sum,3,[req(pre,cpsc100),req(pre,cpsc110)]).
 course(cpsc210,2021,sum,3,[req(pre,cpsc110),req(co,cpsc200)]).
 course(cpsc221,2020,fall,3,[req(alt,(cpsc210,cpsc121))]).
 course(cpsc300,2020,fall,3,[req(pre,cpsc200)).
+course(cpsc321,2020,winter,3,[req(alt,(cpsc210,cpsc200))]).
 course(math100,2020,fall,3,[req(pre,none)]).
 course(math101,2020,fall,3,[req(alt,(math100,math110)]).
 course(math110,2020,sum,3,[req(pre,none)]).
@@ -132,6 +133,9 @@ updateschedule([],[math101,math110,cpsc200,cpsc100,math100,cpsc121,math221],NS),
 
 case: course with no valid prerequisites.
 updateschedule([],[cpsc200,cpsc300],NS),printlist(NS),canBeCompleted(NS,6).
+
+case: course with none of its alternative prerequisites.
+updateschedule([],[cpsc300,cpsc210,cpsc200],NS),printlist(NS),canBeCompleted(NS,6).
 */
 
 
