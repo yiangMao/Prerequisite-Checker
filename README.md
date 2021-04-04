@@ -28,24 +28,31 @@ In addition, we will also provide a prolog query to determine whether a given or
 
 # Demo
 Starting with the "what is the problem part."
+
 Before the demo introduce:
-  The structure of the course.
-  The structure of the requirements.
+
+- The structure of the course.
+  
+- The structure of the requirements.
 
 Demo test cases:
-  case1: course with no requirements.
-  case2: course with prerequisite.
-  case3: course with corequisite.
-  case4: course with alternative prerequisites.
-  case5: courses with multiple types of requirements.
-  case5: fail cases.
+
+- case1: course with no requirements.
+- case2: course with prerequisite.
+- case3: course with corequisite.
+- case4: course with alternative prerequisites.
+- case5: courses with multiple types of requirements.
+- case5: fail cases.
+- 
 Ask the TA about cases he want us to test.
 
 Explain the code:
-  The updateschedule function.
-  The toposort fucntion.
-  The fit function.
+
+- The updateschedule function.
+- The toposort fucntion.
+- The fit function.
 
 End with the "Whats something extra" part.
+
 Let the TA ask questions.
   
