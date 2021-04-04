@@ -43,7 +43,7 @@ Demo test cases:
 - case4: course with alternative prerequisites.
 - case5: courses with multiple types of requirements.
 - case5: fail cases.
-- 
+
 Ask the TA about cases he want us to test.
 
 Explain the code:
