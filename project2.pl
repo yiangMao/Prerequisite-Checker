@@ -42,8 +42,8 @@ course(math221,2021,winter,3,[req(alt,(math100,math101))]).
 % req(co,CPSC110) means CPSC110 is a corequisites.
 
 % fit(C,S) is true if the given schedule S can fit all the requirements of the given course C.
-fit(course(Code,Year,Term,Credit,[]),S).
-fit(course(Code,Year,Term,Credit,[RH|RT]),S) :- checkhelper(Code,Year,Term,[RH|RT],S).
+fit(course(_,_,_,_,[]),_).
+fit(course(Code,Year,Term,_,[RH|RT]),S) :- checkhelper(Code,Year,Term,[RH|RT],S).
 % test with:
 % fit(course(math110,2020,fall,3,[req(co,math100)]),[course(math100,2020,fall,3,[])]).
 % fit(course(cpsc210,2020,fall,3,[req(alt,(cpsc100,math100))]),[course(math100,2020,fall,3,[]),course(cpsc100,2020,winter,3,[])]).
@@ -55,7 +55,7 @@ checkhelper(Code,Year,Term,[RH|RT],S) :-  check(Code,Year,Term,RH,S),checkhelper
 
 % check(C,R,S) is true if the given schedule S can fit the requirement R of the given course C.
 % checks for prerequisite:
-check(C1,Y1,T1,req(pre,Code),[course(Code,Y2,T2,_,_)|T]) :- before(Y2,T2,Y1,T1).
+check(_,Y1,T1,req(pre,Code),[course(Code,Y2,T2,_,_)|_]) :- before(Y2,T2,Y1,T1).
 check(C1,Y1,T1,req(pre,Code),[course(Code1,_,_,_,_)|T]) :- dif(Code,Code1),check(C1,Y1,T1,req(pre,Code),T).
 
 % checks for alt prerequisite:
@@ -64,7 +64,7 @@ check(C1,Y1,T1,req(alt,(Code1,Code2)),[course(Code,Y2,T2,_,_)|T]) :-
 check(C1,Y1,T1,req(alt,(Code1,Code2)),[course(Code,_,_,_,_)|T]) :- dif(Code,Code1),dif(Code,Code2),check(C1,Y1,T1,req(alt,Code),T).
 
 % checks for co-requisites
-check(C1,Y1,T1,req(co,Code),[course(Code,Y2,T2,_,_)|T]) :- sbefore(Y2,T2,Y1,T1).
+check(_,Y1,T1,req(co,Code),[course(Code,Y2,T2,_,_)|_]) :- sbefore(Y2,T2,Y1,T1).
 check(C1,Y1,T1,req(co,Code),[course(Code1,_,_,_,_)|T]) :- dif(Code,Code1),check(C1,Y1,T1,req(co,Code),T).
 
 % schedule(Courses). This a list of all courses added in the schedule.
@@ -85,7 +85,7 @@ findcourselist([CodeH|CodeT],[course(CodeH,Y,Term,C,Req)|T]) :-course(CodeH,Y,Te
 
 % getCourse(Code,List,Course)
 getCourse(Code,[course(Code,T,Y,C,Req)|_],course(Code,T,Y,C,Req)).
-getCourse(Code,[course(Code1,T,Y,C,Req)|CT],Course) :- dif(Code,Code1),getCourse(Code,CT,Course).
+getCourse(Code,[course(Code1,_,_,_,_)|CT],Course) :- dif(Code,Code1),getCourse(Code,CT,Course).
 
 
 % contains(Code,S) is true if schedule contains a course with given course code.
@@ -146,7 +146,7 @@ updateschedule([],[cpsc200,cpsc300],NS),printlist(NS),canBeCompleted(NS,6).
 case: course with none of its alternative prerequisites.
 updateschedule([],[cpsc300,cpsc210,cpsc200],NS),printlist(NS),canBeCompleted(NS,6).
 
-Wrong sort cases:
+Wrong sort cases (FIXED!)
 compare these two:
 findcourselist([cpsc221,cpsc210],CL),generateGraph(CL,Edges),topoSort(Edges,Order).
 findcourselist([cpsc210,cpsc221],CL),generateGraph(CL,Edges),topoSort(Edges,Order).
