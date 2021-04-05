@@ -67,7 +67,5 @@ flattenAltreqsHelper(req(alt, (C1, C2)), [req(alt, C1),req(alt, C2)]).
 :- use_module(library(ugraphs)).
 
 topoSort(Edges, Order) :-
-	write(Edges),
 	vertices_edges_to_ugraph([], Edges, G),
-	write(G),
     top_sort(G, Order).
