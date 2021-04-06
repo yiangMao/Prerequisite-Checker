@@ -20,7 +20,6 @@ generateGraph(CourseList, Edges) :-
 	maplist(extractEdgeRepresentation, PreEdges, Edges).
 
 extractEdgeRepresentation([C1,C2], Edge) :-
-	write([C1, C2]),
 	atom_concat(C1, -, Part1),
 	atom_concat(Part1, C2, PreEdge),
 	term_to_atom(Edge, PreEdge).

@@ -108,7 +108,7 @@ contains2(Code,[Code|_]).
 contains2(Code,[Code1|T]) :- dif(Code,Code1), contains2(Code,T).
 
 printlist([]).
-printlist([X|List]) :- write(X),nl,printlist(List).
+printlist([X|List]) :- nl,write(X),nl,printlist(List).
 
 /*
 course(cpsc100,2020,winter,3,[req(pre,none)]).
@@ -138,7 +138,7 @@ updateschedule([],[cpsc121,cpsc110],NS),printlist(NS),canBeCompleted(NS,6).
 case: course with alternative prerequisite.
 updateschedule([],[math101,math100,math110],NS),printlist(NS),canBeCompleted(NS,6).
 
-updateschedule([],[math101,math110,cpsc200,cpsc100,math100,cpsc121,math221],NS),printlist(NS),canBeCompleted(NS,9).
+updateschedule([],[math101,cpsc110,math110,cpsc200,cpsc100,math100,cpsc121,math221],NS),printlist(NS),canBeCompleted(NS,9).
 
 case: course with no valid prerequisites.
 updateschedule([],[cpsc200,cpsc300],NS),printlist(NS),canBeCompleted(NS,6).
