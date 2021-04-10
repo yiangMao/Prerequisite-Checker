@@ -1,4 +1,4 @@
-# Prerequisite-Checker (Work In Progress)
+# Prerequisite-Checker 
 
 This is a prolog course project for UBC CPSC 312
 
