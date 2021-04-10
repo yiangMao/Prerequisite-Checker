@@ -52,9 +52,11 @@ This will be done in 3 steps as illustrated in the image below:
 
 ![topoSort](./topoSort.jpeg)
 
-Step 1/2: Represent courses and their prerequisites as graph edges where the edge ```a -> b``` means ```a``` is a prerequisite of ```b```.
+Step 1: Create a data structure to represent courses and their prerequisites 
 
-Step 3: Use Kahn's topological sorting algorithm to come up with an ordering of courses such that prerequisites always appear before the courses that need them.
+Step 2: Turn this data structure representation into graph edges where the edge ```a -> b``` means ```a``` is a prerequisite of ```b```.
+
+Step 3: Use Kahn's topological sorting algorithm to sort the graph such that prerequisites always appear before the courses that need them.
 
 Our program will also consider things like handling
 
