@@ -15,9 +15,46 @@ This prolog program will take:
 
 and return an **ordering of courses** such that prerequisites for any given course X are completed before one is scheduled to take course X.
 
+For example, a list of courses can be denoted in the knowledge base as follows:
+
+```
+course(cpsc100,2020,winter,3,[req(pre,none)]). % cpsc100 is scheduled in winter 2020, is worth 3 credits and has no prerequsites 
+course(cpsc110, 2020, winter, 3, [req(pre, none)]). % cpsc 110 is schduled in winter 2020, is worth 3 credits and has no prerequisites
+course(cpsc200,2021,sum,3,[req(pre,cpsc100),req(pre,cpsc110)]). % cpsc200 is scheduled in summer 2021, is worth 3 credts and has 2 pre-requsities i.e., cpsc100 and cpsc110
+
+```
+
+The ```updateSchedule``` query will return the schedule that you should take a given list of courses in
+
+```
+updateschedule([],[cpsc100, cpsc200, cpsc110],NewSchedule)
+
+```
+
+The schedule can be printed to the screen by calling:
+
+```
+
+printlist(NewSchedule)
+
+```
+
+We can also make sure this schedule does not exceed a given number of credts per term by querying ```canBeCompleted```:
+
+```
+canBeCompleted(NewSchedule,9). % returns true if we can complete NewSchedule without exceeding 9 credits per term
+```
 # What is the something extra?
 
 Our program will use Kahn's topological sorting algorithm (implemented in prolog) to calculate the order courses should be taken in.
+
+This will be done in 3 steps as illustrated in the image below:
+
+![topoSort](./topoSort.jpeg)
+
+Step 1/2: Represent courses and their prerequisites as graph edges where the edge ```a -> b``` means ```a``` is a prerequisite of ```b```.
+
+Step 3: Use Kahn's topological sorting algorithm to come up with an ordering of courses such that prerequisites always appear before the courses that need them.
 
 Our program will also consider things like handling
 
