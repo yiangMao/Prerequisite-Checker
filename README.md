@@ -18,25 +18,24 @@ and return an **ordering of courses** such that prerequisites for any given cour
 For example, a list of courses can be denoted in the knowledge base as follows:
 
 ```
-course(cpsc100,2020,winter,3,[req(pre,none)]). % cpsc100 is scheduled in winter 2020, is worth 3 credits and has no prerequsites 
-course(cpsc110, 2020, winter, 3, [req(pre, none)]). % cpsc 110 is schduled in winter 2020, is worth 3 credits and has no prerequisites
-course(cpsc200,2021,sum,3,[req(pre,cpsc100),req(pre,cpsc110)]). % cpsc200 is scheduled in summer 2021, is worth 3 credts and has 2 pre-requsities i.e., cpsc100 and cpsc110
-
+% cpsc100 is scheduled in winter 2020, is worth 3 credits and has no prerequsites 
+course(cpsc100,2020,winter,3,[req(pre,none)]). 
+ % cpsc 110 is schduled in winter 2020, is worth 3 credits and has no prerequisites
+course(cpsc110, 2020, winter, 3, [req(pre, none)]).
+% cpsc200 is scheduled in summer 2021, is worth 3 credts and has 2 pre-requsities i.e., cpsc100 and cpsc110
+course(cpsc200,2021,sum,3,[req(pre,cpsc100),req(pre,cpsc110)]). 
 ```
 
 The ```updateSchedule``` query will return the schedule that you should take a given list of courses in
 
 ```
 updateschedule([],[cpsc100, cpsc200, cpsc110],NewSchedule)
-
 ```
 
 The schedule can be printed to the screen by calling:
 
 ```
-
 printlist(NewSchedule)
-
 ```
 
 We can also make sure this schedule does not exceed a given number of credts per term by querying ```canBeCompleted```:
