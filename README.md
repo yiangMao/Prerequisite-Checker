@@ -64,7 +64,7 @@ Our program will also consider things like handling
 
 In addition, we will also provide a prolog query to determine whether a given ordering of courses can be completed without exceeding a maximum number of credits per term.
 
-# Demo
+# Demo Plan
 
 Starting with the "what is the problem part."
 
