@@ -135,13 +135,13 @@ updateschedule([],[cpsc200,cpsc110,cpsc100],NS),printlist(NS),canBeCompleted(NS,
 case: course with no valid prerequisites.
 updateschedule([],[cpsc200,cpsc300],NS),printlist(NS),canBeCompleted(NS,6).
 
-case: course with prerequisite and corequisites.
+case: course with corequisites.
 updateschedule([],[cpsc121,cpsc110],NS),printlist(NS),canBeCompleted(NS,6).
 
-case: course with alternative prerequisite.
+case: course with alternative prerequisites.
 updateschedule([],[math101,math100,math110],NS),printlist(NS),canBeCompleted(NS,6).
 
-case: course with none of its alternative prerequisites.
+case: course with none of its alternative prerequisites being valid.
 updateschedule([],[cpsc321,cpsc210,cpsc200],NS),printlist(NS),canBeCompleted(NS,6).
 
 updateschedule([],[math101,cpsc110,math110,cpsc200,cpsc100,math100,cpsc121,math221],NS),printlist(NS),canBeCompleted(NS,9).
