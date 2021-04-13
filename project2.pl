@@ -130,7 +130,10 @@ case: course with no prerequisites.
 updateschedule([],[cpsc100],NS),printlist(NS),canBeCompleted(NS,6).
 
 case: course with prerequisite.
-updateschedule([],[cpsc200,cpsc210,cpsc110,cpsc100],NS),printlist(NS),canBeCompleted(NS,6).
+updateschedule([],[cpsc200,cpsc110,cpsc100],NS),printlist(NS),canBeCompleted(NS,6).
+
+case: course with no valid prerequisites.
+updateschedule([],[cpsc200,cpsc300],NS),printlist(NS),canBeCompleted(NS,6).
 
 case: course with prerequisite and corequisites.
 updateschedule([],[cpsc121,cpsc110],NS),printlist(NS),canBeCompleted(NS,6).
@@ -138,26 +141,11 @@ updateschedule([],[cpsc121,cpsc110],NS),printlist(NS),canBeCompleted(NS,6).
 case: course with alternative prerequisite.
 updateschedule([],[math101,math100,math110],NS),printlist(NS),canBeCompleted(NS,6).
 
+case: course with none of its alternative prerequisites.
+updateschedule([],[cpsc321,cpsc210,cpsc200],NS),printlist(NS),canBeCompleted(NS,6).
+
 updateschedule([],[math101,cpsc110,math110,cpsc200,cpsc100,math100,cpsc121,math221],NS),printlist(NS),canBeCompleted(NS,9).
 
-case: course with no valid prerequisites.
-updateschedule([],[cpsc200,cpsc300],NS),printlist(NS),canBeCompleted(NS,6).
-
-case: course with none of its alternative prerequisites.
-updateschedule([],[cpsc300,cpsc210,cpsc200],NS),printlist(NS),canBeCompleted(NS,6).
-
-Wrong sort cases (FIXED!)
-compare these two:
-findcourselist([cpsc221,cpsc210],CL),generateGraph(CL,Edges),topoSort(Edges,Order).
-findcourselist([cpsc210,cpsc221],CL),generateGraph(CL,Edges),topoSort(Edges,Order).
-
-compare these two:
-findcourselist([math101,math100],CL),generateGraph(CL,Edges),topoSort(Edges,Order).
-findcourselist([math100,math101],CL),generateGraph(CL,Edges),topoSort(Edges,Order).
-
-compare these two:
-findcourselist([math221,math100],CL),generateGraph(CL,Edges),topoSort(Edges,Order).
-findcourselist([math100,math221],CL),generateGraph(CL,Edges),topoSort(Edges,Order).
 */
 
 
